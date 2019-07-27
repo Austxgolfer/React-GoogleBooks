@@ -4,8 +4,7 @@ const logger = require("morgan");
 const mongoose = require("mongoose");
 
 const axios = require("axios");
-const MONGODB_URI =
-  process.env.MONGODB_URI || "mongodb://localhost/unit18Populater";
+const MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/GBooks";
 
 const db = require("./models");
 
@@ -22,9 +21,9 @@ app.use(express.static("public"));
 mongoose.connect(MONGODB_URI, { useNewUrlParser: true });
 
 app.get("/api/books", function(req, res) {
-  db.Article.find({})
-    .then(function(dbArticle) {
-      res.json(dbArticle);
+  db.Book.find({})
+    .then(function(dbBook) {
+      res.json(dbBook);
     })
     .catch(function(err) {
       res.json(err);
@@ -34,14 +33,14 @@ app.post("/api/books", function(req, res) {
   db.Note.create(req.body)
     .then(function(dbNote) {
       console.log("updatenote", dbNote);
-      return db.Article.findOneAndUpdate(
+      return db.Book.findOneAndUpdate(
         { _id: req.params.id },
         { note: dbNote._id },
         { new: true }
       );
     })
-    .then(function(dbArticle) {
-      res.json(dbArticle);
+    .then(function(dbBook) {
+      res.json(dbBook);
     })
     .catch(function(err) {
       res.json(err);
@@ -52,15 +51,15 @@ app.post("/api/books/:id", function(req, res) {
     .then(function() {
       db.Note.findOne({ artid: req.body.artid }).then(function(dbNote) {
         console.log("updatenote", dbNote);
-        return db.Article.findOneAndUpdate(
+        return db.Book.findOneAndUpdate(
           { _id: req.body.artid },
           { note: dbNote._id },
           { new: true }
         );
       });
     })
-    .then(function(dbArticle) {
-      res.json(dbArticle);
+    .then(function(dbBook) {
+      res.json(dbBook);
     })
     .catch(function(err) {
       res.json(err);
